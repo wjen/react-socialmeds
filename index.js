@@ -1,18 +1,8 @@
 const { ApolloServer } = require('apollo-server');
-const gql = require('graphql-tag');
 const mongoose = require('mongoose');
 const { MONGODB } = require('./config.js');
-const typeDefs = gql`
-  type Query {
-    sayHi: String!
-  }
-`;
-
-const resolvers = {
-  Query: {
-    sayHi: () => 'Hello World',
-  },
-};
+const typeDefs = require('./graphql/typeDefs.js');
+const resolvers = require('./graphql/resolvers/index');
 
 const server = new ApolloServer({
   typeDefs,
