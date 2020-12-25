@@ -1,6 +1,6 @@
-const gql = require('graphql-tag');
+const { gql } = require('apollo-server');
 
-const typeDefs = gql`
+module.exports = gql`
   type Post {
     id: ID!
     body: String!
@@ -9,9 +9,9 @@ const typeDefs = gql`
   }
   type User {
     id: ID!
-    username: String!
-    token: String!
     email: String!
+    token: String!
+    username: String!
     createdAt: String!
   }
   input RegisterInput {
@@ -27,5 +27,3 @@ const typeDefs = gql`
     register(registerInput: RegisterInput): User!
   }
 `;
-
-module.exports = typeDefs;
