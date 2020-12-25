@@ -1,8 +1,14 @@
-const User = require('../../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { UserInputError } = require('apollo-server');
+
+const {
+  validateRegisterInput,
+  validateLoginInput,
+} = require('../../util/validators');
 const { SECRET_KEY } = require('../../config');
-const { userInputError, UserInputError } = require('apollo-server');
+const User = require('../../models/User');
+
 function generateToken(user) {
   return jwt.sign(
     {
@@ -14,28 +20,31 @@ function generateToken(user) {
     { expiresIn: '1h' }
   );
 }
-const resolvers = {
-  // parent: gives result of the input from last step
-  // args: register functions arguments
-  // context:
-  // info: meta data general info
-  // Bcrypt is async
+module.exports = {
   Mutation: {
-    async register(_, args, context, info) {
-      let {
-        registerInput: { username, password, email, confirmPassword },
-      } = args;
-      // Validate Data
+    async register(
+      _,
+      { registerInput: { username, email, password, confirmPassword } }
+    ) {
+      // Validate user data
+      const { valid, errors } = validateRegisterInput(
+        username,
+        email,
+        password,
+        confirmPassword
+      );
+      if (!valid) {
+        throw new UserInputError('Errors', { errors });
+      }
+      // TODO: Make sure user doesnt already exist
       const user = await User.find({ username });
       if (user) {
-        throw new UserInputError('username is taken', {
+        throw new UserInputError('Username is taken', {
           errors: {
-            username: 'this username is taken',
+            username: 'This username is taken',
           },
         });
       }
-      // Make sure user does not already exist
-
       // hash password and create an auth token
       password = await bcrypt.hash(password, 12);
 
@@ -47,16 +56,44 @@ const resolvers = {
       });
 
       const res = await newUser.save();
+
       const token = generateToken(res);
 
       return {
         ...res._doc,
-        // id and token not in doc by default
         id: res._id,
+        token,
+      };
+    },
+
+    async login(_, { username, password }) {
+      const { errors, valid } = validateLoginInput(username, password);
+
+      if (!valid) {
+        throw new UserInputError('Errors', { errors });
+      }
+
+      const user = await User.find({ username });
+      console.log(user);
+
+      if (!user) {
+        errors.general = 'User not found';
+        throw new UserInputError('User not found', { errors });
+      }
+
+      const match = await bcrypt.compare(password, user.password);
+      if (!match) {
+        errors.general = 'Wrong crendetials';
+        throw new UserInputError('Wrong crendetials', { errors });
+      }
+
+      const token = generateToken(user);
+
+      return {
+        ...user._doc,
+        id: user._id,
         token,
       };
     },
   },
 };
-
-module.exports = resolvers;
