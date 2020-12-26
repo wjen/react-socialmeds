@@ -29,6 +29,10 @@ module.exports = {
   Mutation: {
     async createPost(_, { body }, context) {
       const user = checkAuth(context);
+
+      if (args.body.trim() === '') {
+        throw new Error('Post body must not be empty');
+      }
       let newPost = new Post({
         body,
         user: user.id,
@@ -36,6 +40,9 @@ module.exports = {
         createdAt: new Date().toISOString(),
       });
       const post = await newPost.save();
+      context.pubsub.publish('NEW_POST', {
+        newPost: post,
+      });
       return post;
     },
     async deletePost(_, { postId }, context) {
@@ -68,6 +75,11 @@ module.exports = {
       } else {
         throw new UserInputError('Post not found');
       }
+    },
+  },
+  Subscription: {
+    newPost: {
+      subscribe: (_, __, { pubsub }) => pubsub.asyncIterator('NEW_POST'),
     },
   },
 };
