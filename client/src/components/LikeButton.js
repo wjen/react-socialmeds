@@ -17,6 +17,9 @@ function LikeButton({ user, post }) {
   }, [likes, user]);
 
   const [likePost] = useMutation(LIKE_POST_MUTATION, {
+    onError(error) {
+      console.log(error);
+    },
     variables: { postId: id },
   });
 
@@ -36,7 +39,7 @@ function LikeButton({ user, post }) {
     </Button>
   );
   return (
-    <MyPopup content="like post">
+    <MyPopup content={liked ? 'Unlike' : 'Like'}>
       <Button as="div" labelPosition="right" onClick={likePost}>
         {likeButton}
         <Label basic color="teal" pointing="left">
