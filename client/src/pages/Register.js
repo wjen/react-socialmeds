@@ -7,12 +7,6 @@ import { AuthContext } from '../context/auth';
 function Register(props) {
   const context = useContext(AuthContext);
   const [errors, setErrors] = useState({});
-  // const [values, setValues] = useState({
-  //   username: '',
-  //   email: '',
-  //   password: '',
-  //   confirmPassword: '',
-  // });
 
   const { onChange, onSubmit, values } = useForm(registerUser, {
     username: '',
@@ -20,9 +14,7 @@ function Register(props) {
     password: '',
     confirmPassword: '',
   });
-  // const onChange = (e) => {
-  //   setValues({ ...values, [e.target.name]: e.target.value });
-  // };
+
   const [addUser, { loading }] = useMutation(REGISTER_USER, {
     update(proxy, { data: { register: userData } }) {
       context.login(userData);
@@ -33,10 +25,6 @@ function Register(props) {
     },
     variables: values,
   });
-  // const onSubmit = (e) => {
-  //   e.preventDefault();
-  //   addUser();
-  // };
 
   function registerUser() {
     addUser();
