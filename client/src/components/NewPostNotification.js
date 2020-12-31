@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { gql, useSubscription } from '@apollo/client';
 import { Message } from 'semantic-ui-react';
+
 const SUBSCRIBE_POST_ADDED = gql`
   subscription {
     newPost {
