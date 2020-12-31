@@ -6,6 +6,7 @@ import AuthRoute from './util/AuthRoute';
 import 'semantic-ui-css/semantic.min.css';
 import './App.css';
 
+import NewPostNotification from './components/NewPostNotification';
 import MenuBar from './components/MenuBar';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -18,6 +19,7 @@ function App() {
       <Router>
         <Container>
           <MenuBar />
+          <NewPostNotification />
           <Route exact path="/" component={Home} />
           <AuthRoute exact path="/login" component={Login} />
           <AuthRoute exact path="/register" component={Register} />

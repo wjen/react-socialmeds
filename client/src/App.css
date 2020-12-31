@@ -8,3 +8,7 @@
   width: 400px;
   margin: auto;
 }
+
+.notification {
+  padding: 10px 30px !important;
+}
