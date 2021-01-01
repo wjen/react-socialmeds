@@ -15,11 +15,6 @@ Allows users to see others users posts and login/register to create posts. Abili
 
 ** Check out the live app on [Heroku](https://react-socialmeds-client.herokuapp.com/)
 
+![homepage](client/public/home_page.png)
 
-###Home page
-
-![](client/public/home_page.png)
-
-
-###Single post page
-![](client/public/single_page.png)
+![singlepost](client/public/single_page.png)
