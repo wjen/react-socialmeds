@@ -13,6 +13,7 @@ import moment from 'moment';
 import { AuthContext } from '../context/auth';
 import DeleteButton from '../components/DeleteButton';
 import LikeButton from '../components/LikeButton';
+import EditModal from '../components/EditModal';
 import { MyPopup } from '../util/MyPopup';
 
 function SinglePost(props) {
@@ -93,6 +94,9 @@ function SinglePost(props) {
                     </Label>
                   </Button>
                 </MyPopup>
+                {user && user.username === username && (
+                  <EditModal postId={id} body={body} username={username} />
+                )}
                 {user && user.username === username && (
                   <DeleteButton postId={id} callback={deletePostCallback} />
                 )}
