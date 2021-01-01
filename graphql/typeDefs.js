@@ -47,6 +47,7 @@ module.exports = gql`
     createComment(postId: ID!, body: String!): Post!
     # getting post Id will allow to check if post is deleted
     deleteComment(postId: ID!, commentId: ID!): Post!
+    editPost(postId: ID!, body: String!): Post!
     # like post will be a toggle
     likePost(postId: ID!): Post!
   }

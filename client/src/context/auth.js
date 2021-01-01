@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from 'react';
+import React, { createContext, useReducer, useState } from 'react';
 import jwtDecode from 'jwt-decode';
 
 let initialState = { user: null };
@@ -35,6 +35,7 @@ const authReducer = (state, action) => {
 };
 const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   function login(userData) {
     localStorage.setItem('jwtToken', userData.token);
@@ -47,7 +48,9 @@ const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ ...state, login, logout }}>
+    <AuthContext.Provider
+      value={{ ...state, isModalOpen, setIsModalOpen, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

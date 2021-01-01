@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
-import { Button, Card, Icon, Label, Image } from 'semantic-ui-react';
+import { Button, Card, Icon, Label, Image, Popup } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { AuthContext } from '../context/auth';
 import LikeButton from './LikeButton';
 import DeleteButton from './DeleteButton';
+import EditModal from './EditModal';
 import { MyPopup } from '../util/MyPopup';
 
 function PostCard({
@@ -39,6 +40,9 @@ function PostCard({
             </Label>
           </Button>
         </MyPopup>
+        {user && user.username === username && (
+          <EditModal postId={id} body={body} username={username} />
+        )}
         {user && user.username === username && <DeleteButton postId={id} />}
       </Card.Content>
     </Card>

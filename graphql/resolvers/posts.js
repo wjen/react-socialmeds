@@ -43,18 +43,45 @@ module.exports = {
         username: user.username,
         createdAt: new Date().toISOString(),
       });
+      console.log('hi');
+      console.log(newPost);
+
       const post = await newPost.save();
+
       context.pubsub.publish('NEW_POST', {
         newPost: post,
       });
+
       return post;
     },
+    async editPost(_, { postId, body }, context) {
+      const user = checkAuth(context);
+      try {
+        let post = await Post.findById(postId);
+        console.log('post: ' + post);
+        console.log(user);
+        if (user.username === post.username) {
+          console.log(body);
+          let newPost = new Post({
+            body,
+            user: user.id,
+            username: user.username,
+            createdAt: post.createdAt,
+            _id: post.id,
+          });
+          post = await Post.findByIdAndUpdate(postId, newPost, { new: true });
+          console.log('new post: ', post);
+          return post;
+        }
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+
     async deletePost(_, { postId }, context) {
       const user = checkAuth(context);
       try {
         const post = await Post.findById(postId);
-        console.log('post' + post);
-        console.log(user);
         if (user.username === post.username) {
           await post.delete();
           return 'Post deleted succesfully';
