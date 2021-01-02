@@ -29,21 +29,31 @@ function PostCard({
         <Card.Description>{body}</Card.Description>
       </Card.Content>
       <Card.Content extra>
-        <LikeButton user={user} post={{ id, likes, likeCount }} />
-        <MyPopup content="Comment on post">
-          <Button as={Link} to={`/posts/${id}`} labelPosition="right">
-            <Button color="blue" basic>
-              <Icon name="comments" />
+        <div className="buttons-container">
+          <LikeButton user={user} post={{ id, likes, likeCount }} />
+          <MyPopup content="Comment on post">
+            <Button as={Link} to={`/posts/${id}`} labelPosition="right">
+              <Button color="blue" basic>
+                <Icon name="comments" />
+              </Button>
+              <Label basic color="blue" pointing="left">
+                {commentCount}
+              </Label>
             </Button>
-            <Label basic color="blue" pointing="left">
-              {commentCount}
-            </Label>
-          </Button>
-        </MyPopup>
-        {user && user.username === username && (
-          <EditModal postId={id} body={body} username={username} />
-        )}
-        {user && user.username === username && <DeleteButton postId={id} />}
+          </MyPopup>
+          {user && user.username === username && (
+            <EditModal
+              as="div"
+              postId={id}
+              body={body}
+              username={username}
+              labelPosition="right"
+            />
+          )}
+          {user && user.username === username && (
+            <DeleteButton postId={id} as="div" labelPosition="right" />
+          )}
+        </div>
       </Card.Content>
     </Card>
   );

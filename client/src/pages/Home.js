@@ -13,7 +13,7 @@ function Home() {
     throw new Error(error);
   }
   return (
-    <Grid columns={3}>
+    <Grid stackable columns={3}>
       <Grid.Row className="page-title">
         <h1>Recent Posts</h1>
       </Grid.Row>
@@ -30,7 +30,7 @@ function Home() {
             {data &&
               data.getPosts.map((post) => (
                 <Grid.Column key={post.id} style={{ marginBottom: 20 }}>
-                  <PostCard post={post} />
+                  <PostCard post={post} style={{ minWidth: 600 }} />
                 </Grid.Column>
               ))}
           </Transition.Group>
